@@ -201,7 +201,7 @@ try:
     nltk.download('punkt_tab')
 except LookupError as e:
     print(f"Error: {e}")
-    
+
 try:
     find('tokenizers/punkt')
 except LookupError:
@@ -312,6 +312,13 @@ def query_handler(query, context_text):
     response = requests.post("https://api-inference.huggingface.co/models/google/flan-t5-large", headers=headers, json={"inputs": prompt})
     return response.json()[0]['generated_text']
 
+def delete_pinecone_index():
+    try:
+        pc.delete_index(name=PINECONE_INDEX_NAME)
+        st.success(f"Session ended and index {PINECONE_INDEX_NAME} deleted.")
+    except Exception as e:
+        st.error(f"Error deleting index: {str(e)}")
+        
 # Streamlit App UI
 st.title("Video Analysis & Q&A Tool with Embedding Cleanup")
 st.write("Upload a video to transcribe and perform question-answering based on its content.")
@@ -361,3 +368,6 @@ if st.button("End Session"):
             st.success(f"Session ended and index {PINECONE_INDEX_NAME} deleted.")
     except Exception as e:
             st.error(f"Error deleting index: {str(e)}")
+
+if 'session_id' in st.session_state:
+    delete_pinecone_index()
