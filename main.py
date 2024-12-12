@@ -195,19 +195,15 @@ import os
 from nltk.data import find
 from huggingface_hub import InferenceApi
 
-# Initialize the NLTK punkt tokenizer
 nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
-if not os.path.exists(nltk_data_dir):
-    os.makedirs(nltk_data_dir)
-
+# Set the NLTK data environment variable
+nltk.data.path.append(nltk_data_dir)
+# Download the 'punkt' tokenizer if not available
 try:
     find('tokenizers/punkt')
 except LookupError:
     nltk.download('punkt', download_dir=nltk_data_dir)
-
-# Add nltk_data path to ensure availability
-nltk.data.path.append(nltk_data_dir)
-
+    
 # API Keys
 ASSEMBLY_AI_API_KEY = st.secrets["ASSEMBLY_AI_API_KEY"]
 HF_API_KEY =st.secrets["HF_API_KEY"]
