@@ -194,10 +194,14 @@ import nltk
 import os
 from nltk.data import find
 from huggingface_hub import InferenceApi
-
 from nltk.data import find
 nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
 
+try:
+    nltk.download('punkt_tab')
+except LookupError as e:
+    print(f"Error: {e}")
+    
 try:
     find('tokenizers/punkt')
 except LookupError:
